@@ -1,22 +1,29 @@
+import random
 from typing import Union
 from pyrogram import filters, types
 from pyrogram.types import InlineKeyboardMarkup, Message, InlineKeyboardButton
-from SACHIN_MUSIC import app
-from SACHIN_MUSIC.utils import help_pannel
-from SACHIN_MUSIC.utils.database import get_lang
-from SACHIN_MUSIC.utils.decorators.language import LanguageStart, languageCB
-from SACHIN_MUSIC.utils.inline.help import help_back_markup, private_help_panel
+from NEXIOMUSIC import app
+from NEXIOMUSIC.utils import help_pannel
+from NEXIOMUSIC.utils.database import get_lang
+from NEXIOMUSIC.utils.decorators.language import LanguageStart, languageCB
+from NEXIOMUSIC.utils.inline.help import help_back_markup, private_help_panel
 from config import BANNED_USERS, START_IMG_URL, SUPPORT_CHAT
 from strings import get_string, helpers
-from SACHIN_MUSIC.help.buttons import BUTTONS
-from SACHIN_MUSIC.help.helper import Helper
+from NEXIOMUSIC.help.buttons import BUTTONS
+from NEXIOMUSIC.help.helper import Helper
 
-#------------------------------------------------------------------------------------------------------------------------
-# MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | MUSIC | 
-#------------------------------------------------------------------------------------------------------------------------
-
-
-
+NEXIO_VD = ["https://telegra.ph/file/89c5023101b65f21fb401.mp4",
+          "https://telegra.ph/file/bbc914cce6cce7f607641.mp4",
+          "https://telegra.ph/file/abc578ecc222d28a861ba.mp4",
+          "https://telegra.ph/file/065f40352707e9b5b7c15.mp4",
+          "https://telegra.ph/file/52ceaf02eae7eed6c9fff.mp4",
+          "https://telegra.ph/file/299108f6ac08f4e65e47a.mp4",
+          "https://telegra.ph/file/7a4e08bd04d628de71fc1.mp4",
+          "https://telegra.ph/file/0ad8b932fe5f7684f941c.mp4",
+          "https://telegra.ph/file/95ebe2065cfb1ac324a1c.mp4",
+          "https://telegra.ph/file/98cf22ccb987f9fedac5e.mp4",
+          "https://telegra.ph/file/f1b1754fc9d01998f24df.mp4",
+          "https://telegra.ph/file/421ee22ed492a7b8ce101.mp4"]
 
 
 @app.on_message(filters.command(["help"]) & filters.private & ~BANNED_USERS)
@@ -45,8 +52,8 @@ async def helper_private(
         language = await get_lang(update.chat.id)
         _ = get_string(language)
         keyboard = help_pannel(_)
-        await update.reply_photo(
-            photo=START_IMG_URL,
+        await update.reply_video(
+            random.choice(NEXIO_VD),
             caption=_["help_1"].format(SUPPORT_CHAT),
             reply_markup=keyboard,
         )
@@ -97,10 +104,90 @@ async def helper_cb(client, CallbackQuery, _):
 
 
 
+#------------------------------------------------------------------------------------------------------------------------
+# MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | 
+#------------------------------------------------------------------------------------------------------------------------
+
+@app.on_callback_query(filters.regex("MAIN_CP") & ~BANNED_USERS)
+async def helper_cb(client, CallbackQuery):
+    await CallbackQuery.edit_message_text(Helper.HELP_MAIN, reply_markup=InlineKeyboardMarkup(BUTTONS.MBUTTON))
+    
+        
+@app.on_callback_query(filters.regex('MAIN_BACK'))      
+async def mb_plugin_button(client, CallbackQuery):
+    callback_data = CallbackQuery.data.strip()
+    cb = callback_data.split(None, 1)[1]
+    keyboard = InlineKeyboardMarkup(
+    [
+    [
+    InlineKeyboardButton("ʙᴀᴄᴋ", callback_data=f"MAIN_CP")
+    ]
+    ]
+    )
+    if cb == "MAIN":
+        await CallbackQuery.edit_message_text(f"`something errors`",reply_markup=keyboard,parse_mode=enums.ParseMode.MARKDOWN)
+    else:
+        await CallbackQuery.edit_message_text(getattr(Helper, cb), reply_markup=keyboard)
 
 
 #------------------------------------------------------------------------------------------------------------------------
-# MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | MANAGEMENT | 
+# SUPPORT | SUPPORT | SUPPORT | SUPPORT | SUPPORT | SUPPORT | SUPPORT | SUPPORT | SUPPORT | SUPPORT | SUPPORT | SUPPORT |
+#------------------------------------------------------------------------------------------------------------------------
+
+@app.on_callback_query(filters.regex("SUPPORT_CP") & ~BANNED_USERS)
+async def helper_cb(client, CallbackQuery):
+    await CallbackQuery.edit_message_text(Helper.HELP_SUPPORT, reply_markup=InlineKeyboardMarkup(BUTTONS.SBUTTON))
+    
+        
+@app.on_callback_query(filters.regex('SUPPORT_BACK'))      
+async def mb_plugin_button(client, CallbackQuery):
+    callback_data = CallbackQuery.data.strip()
+    cb = callback_data.split(None, 1)[1]
+    keyboard = InlineKeyboardMarkup(
+    [
+    [
+    InlineKeyboardButton("ʙᴀᴄᴋ", callback_data=f"SUPPORT_CP")
+    ]
+    ]
+    )
+    if cb == "SUPPORT":
+        await CallbackQuery.edit_message_text(f"`something errors`",reply_markup=keyboard,parse_mode=enums.ParseMode.MARKDOWN)
+    else:
+        await CallbackQuery.edit_message_text(getattr(Helper, cb), reply_markup=keyboard)
+
+
+#------------------------------------------------------------------------------------------------------------------------
+# ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT | ABOUT |
+#------------------------------------------------------------------------------------------------------------------------
+
+@app.on_callback_query(filters.regex("ABOUT_CP") & ~BANNED_USERS)
+async def helper_cb(client, CallbackQuery):
+    await CallbackQuery.edit_message_text(Helper.HELP_ABOUT, reply_markup=InlineKeyboardMarkup(BUTTONS.ABUTTON))
+    
+        
+@app.on_callback_query(filters.regex('ABOUT_BACK'))      
+async def mb_plugin_button(client, CallbackQuery):
+    callback_data = CallbackQuery.data.strip()
+    cb = callback_data.split(None, 1)[1]
+    keyboard = InlineKeyboardMarkup(
+    [
+    [
+    InlineKeyboardButton("ʙᴀᴄᴋ", callback_data=f"ABOUT_CP")
+    ]
+    ]
+    )
+    if cb == "ABOUT":
+        await CallbackQuery.edit_message_text(f"`something errors`",reply_markup=keyboard,parse_mode=enums.ParseMode.MARKDOWN)
+    else:
+        await CallbackQuery.edit_message_text(getattr(Helper, cb), reply_markup=keyboard)
+
+
+#------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------
+
+
+
 #------------------------------------------------------------------------------------------------------------------------
 
 
@@ -328,8 +415,4 @@ async def mb_plugin_button(client, CallbackQuery):
 
 
 #------------------------------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------------------------
-
-
-
+#----------------------------------------------------------------------------------------------
